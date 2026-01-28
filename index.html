@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lucy Nail Bar and Spa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f6f6;
+}
+header {
+  background: #c2185b;
+  color: white;
+  padding: 25px;
+  text-align: center;
+}
+section {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+.card {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+h2 {
+  color: #c2185b;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+.gallery img {
+  width: 100%;
+  border-radius: 8px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+button {
+  background: #c2185b;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+button:disabled {
+  background: gray;
+}
+footer {
+  background: #eee;
+  text-align: center;
+  padding: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Lucy Nail Bar and Spa</h1>
+  <p>💅 Nails • 💆 Massage • ✨ Beauty</p>
+</header>
+
+<section>
+  <div class="card">
+    <h2>🕒 Working Hours</h2>
+    <p>Monday – Friday: <b>07:00 – 16:30</b></p>
+    <p>Saturday: <b>07:00 – 12:00</b></p>
+    <p>📞 House Call Available: <b>082 215 2912</b></p>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <h2>💅 Nail Gallery</h2>
+    <div class="gallery">
+      <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371">
+      <img src="https://images.unsplash.com/photo-1596464716127-f2a82984de30">
+      <img src="https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3">
+      <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <h2>💰 Price List</h2>
+
+    <h3>NAILS</h3>
+    <table>
+      <tr><td>Nail Repair</td><td>R29.99</td></tr>
+      <tr><td>File and Cutex</td><td>R59.99</td></tr>
+      <tr><td>Soak</td><td>R49.99</td></tr>
+      <tr><td>Backfill</td><td>R149.99</td></tr>
+      <tr><td>Acrylic Overlay</td><td>R179.99</td></tr>
+      <tr><td>Full Set & Toes</td><td>R179.99</td></tr>
+      <tr><td>Pedicure</td><td>R149.99</td></tr>
+    </table>
+
+    <h3>MASSAGE</h3>
+    <table>
+      <tr><td>Full Body (35 min)</td><td>R350</td></tr>
+      <tr><td>Full Body + Hot Stones</td><td>R449.99</td></tr>
+      <tr><td>Neck & Shoulder</td><td>R249.99</td></tr>
+      <tr><td>Neck & Shoulder + Stones</td><td>R350</td></tr>
+      <tr><td>Back</td><td>R199.99</td></tr>
+      <tr><td>Back + Stones</td><td>R299.99</td></tr>
+      <tr><td>Legs</td><td>R99.99</td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <h2>📅 Book Appointment</h2>
+
+    <input type="date" id="date">
+    <select id="time"></select>
+    <button onclick="book()">Book via WhatsApp</button>
+
+    <p id="message"></p>
+  </div>
+</section>
+
+<footer>
+  © 2026 Lucy Nail Bar and Spa
+</footer>
+
+<script>
+const timeSelect = document.getElementById("time");
+const message = document.getElementById("message");
+
+document.getElementById("date").addEventListener("change", () => {
+  timeSelect.innerHTML = "";
+  const date = document.getElementById("date").value;
+  if (!date) return;
+
+  const day = new Date(date).getDay();
+  let start = 7;
+  let end = (day === 6) ? 12 : 16.5;
+
+  for (let t = start; t < end; t += 0.5) {
+    let h = Math.floor(t);
+    let m = t % 1 ? "30" : "00";
+    let time = `${h}:${m}`;
+    let key = date + time;
+
+    if (!localStorage.getItem(key)) {
+      let opt = document.createElement("option");
+      opt.value = time;
+      opt.textContent = time;
+      timeSelect.appendChild(opt);
+    }
+  }
+});
+
+function book() {
+  const date = document.getElementById("date").value;
+  const time = timeSelect.value;
+
+  if (!date || !time) {
+    message.innerText = "Please select a date and time.";
+    return;
+  }
+
+  const key = date + time;
+  if (localStorage.getItem(key)) {
+    message.innerText = "This time slot is already booked.";
+    return;
+  }
+
+  localStorage.setItem(key, "BOOKED");
+
+  const text = `Hello, I would like to book an appointment at Lucy Nail Bar and Spa on ${date} at ${time}.`;
+  window.open(`https://wa.me/27822152912?text=${encodeURIComponent(text)}`, "_blank");
+}
+</script>
+
+</body>
+</html>
